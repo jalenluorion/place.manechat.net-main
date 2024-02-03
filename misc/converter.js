@@ -102,8 +102,11 @@ function pngToEvents(path, userId)
 
 module.exports = { readEvents, writeEvents, eventsToPng, pngToEvents };
 
-const out = pngToEvents("./download.png", "775186735185264641");
-console.log(out)
+// const out = pngToEvents("./download.png", "775186735185264641");
+// console.log(out)
 
-// save as hst
-writeEvents(out, "./download.hst")
+// // save as hst
+// writeEvents(out, "./download.hst")
+
+// read hst and onvert to image
+
