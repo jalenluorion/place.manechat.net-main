@@ -218,6 +218,7 @@ const canvas = new Canvas().initialize({
 const io = new Canvas.IO(canvas, "./canvas/current.hst");
 const stats = new Canvas.Stats(canvas, io, () => clients.size);
 io.read();
+canvas.preset("./events.json");
 stats.startRecording(
     10 * 60 * 1000 /* 10 min */,
     24 * 60 * 60 * 1000 /* 24 hrs */
@@ -735,6 +736,10 @@ app.get("/datadump", (req, res) => {
     archive.finalize();
 });
 
+app.get("/backupdump", (req, res) => { 
+    //return the canvas variable
+    res.json(canvas);
+});
 /*
  * ===============================
  */

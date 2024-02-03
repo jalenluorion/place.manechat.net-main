@@ -265,6 +265,19 @@ class Canvas extends EventEmitter {
 
 		return true;
 	}
+
+	// takes in a json file of pixel events and writes them to the canvas
+	preset(path) {
+		const events = JSON.parse(FileSystem.readFileSync(path, {
+			encoding: "utf-8"
+		}));
+
+		for (const event of events) {
+			this._setPixel(event.x, event.y, event.color, event.userId, event.timestamp);
+			this.emit("pixel",event.x, event.y, event.color, event.userId, event.timestamp);
+		}
+	}
+
 	}
 
 
