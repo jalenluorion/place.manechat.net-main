@@ -14,7 +14,7 @@ const promisify = require("util").promisify;
 const archiver = require("archiver");
 
 // Our stuff
-const Canvas = require("/canvas");
+const Canvas = require("./canvas");
 
 // Configs
 const Config = require("./config.json");
@@ -215,6 +215,14 @@ const canvas = new Canvas().initialize({
         "#ffffff",
     ],
 });
+
+const canvasFolderPath = "/canvas";
+if (fs.existsSync(canvasFolderPath)) {
+    const source = "/canvas";
+    const dest = "./canvas";
+    fs.copyFileSync(source, dest);
+    console.log("Canvas folder copied successfully");
+}
 const io = new Canvas.IO(canvas, "./canvas/current.hst");
 const stats = new Canvas.Stats(canvas, io, () => clients.size);
 io.read();
@@ -222,6 +230,12 @@ stats.startRecording(
     10 * 60 * 1000 /* 10 min */,
     24 * 60 * 60 * 1000 /* 24 hrs */
 );
+setInterval(() => {
+    const source = "./canvas";
+    const dest = "/canvas";
+    fs.copyFileSync(source, dest);
+    console.log("Canvas folder copied successfully");
+}, 60 * 1000);
 
 // day 2 colors
 // const colors = [ "#ff4500", "#ffa800", "#ffd635", "#00a368", "#7eed56", "#2450a4", "#3690ea", "#51e9f4", "#811e9f", "#b44ac0", "#ff99aa", "#9c6926", "#000000", "#898d90", "#d4d7d9", "ffffff" ];
@@ -237,7 +251,7 @@ stats.startRecording(
  */
 
 const oauthRedirectUrl =
-    "https://blueyplace-7jfhuhqmfa-uc.a.run.app/auth/discord/redirect";
+    "http://localhost:8080/auth/discord/redirect";
 const oauthScope = "identify";
 
 app.get("/landing", function (req, res) {
