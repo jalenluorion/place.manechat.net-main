@@ -216,18 +216,26 @@ const canvas = new Canvas().initialize({
     ],
 });
 
-const canvasFolderPath = "/canvas";
-if (fs.existsSync(canvasFolderPath)) {
+const canvasFolderPath1 = "/canvas/sessions";
+if (fs.existsSync(canvasFolderPath1)) {
     const source1 = "/canvas/sessions";
     const dest1 = "./canvas/sessions";
     fs.copyFileSync(source1, dest1);
+    console.log("Canvas sessions copied successfully");
+}
+const canvasFolderPath2 = "/canvas/current.hst";
+if (fs.existsSync(canvasFolderPath2)) {
     const source2 = "/canvas/current.hst";
     const dest2 = "./canvas/current.hst";
     fs.copyFileSync(source2, dest2);
+    console.log("Canvas hst copied successfully");
+}
+const canvasFolderPath3 = "/canvas/userCountOverTime.json";
+if (fs.existsSync(canvasFolderPath3)) {
     const source3 = "/canvas/userCountOverTime.json";
     const dest3 = "./canvas/userCountOverTime.json";
     fs.copyFileSync(source3, dest3);
-    console.log("Canvas folder copied successfully");
+    console.log("Canvas count copied successfully");
 }
 const io = new Canvas.IO(canvas, "./canvas/current.hst");
 const stats = new Canvas.Stats(canvas, io, () => clients.size);
