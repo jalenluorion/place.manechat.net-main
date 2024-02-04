@@ -220,17 +220,15 @@ const canvas = new Canvas().initialize({
 const canvasFolderPath2 = "./canvasbackup/current.hst";
 if (fs.existsSync(canvasFolderPath2)) {
     const source2 = "./canvasbackup/current.hst";
-    const source2File = fs.readFileSync(source2, "utf8");
     const dest2 = "./canvas/current.hst";
-    fs.writeFileSync(dest2, source2File)
+    fs.copyFileSync(source2, dest2);
     console.log("Canvas hst copied successfully");
 }
 const canvasFolderPath3 = "./canvasbackup/userCountOverTime.json";
 if (fs.existsSync(canvasFolderPath3)) {
     const source3 = "./canvasbackup/userCountOverTime.json";
-    const source3File = fs.readFileSync(source3, "utf8")
     const dest3 = "./canvas/userCountOverTime.json";
-    fs.writeFileSync(dest3, source3File)
+    fs.copyFileSync(source3, dest3);
     console.log("Canvas count copied successfully");
 }
 const io = new Canvas.IO(canvas, "./canvas/current.hst");
@@ -240,17 +238,6 @@ stats.startRecording(
     10 * 60 * 1000 /* 10 min */,
     24 * 60 * 60 * 1000 /* 24 hrs */
 );
-setInterval(() => {
-    const source2 = "./canvas/current.hst";
-    const readSource = fs.readFileSync(source2, "utf8");
-    const dest2 = "/canvas/current.hst";
-    fs.writeFileSync(dest2, readSource);
-    const source3 = "./canvas/userCountOverTime.json";
-    const readSource3 = fs.readFileSync(source3, "utf8");
-    const dest3 = "/canvas/userCountOverTime.json";
-    fs.writeFileSync(dest3, readSource3);
-    console.log("Canvas folder backed up successfully");
-}, 120 * 1000);
 
 // day 2 colors
 // const colors = [ "#ff4500", "#ffa800", "#ffd635", "#00a368", "#7eed56", "#2450a4", "#3690ea", "#51e9f4", "#811e9f", "#b44ac0", "#ff99aa", "#9c6926", "#000000", "#898d90", "#d4d7d9", "ffffff" ];
