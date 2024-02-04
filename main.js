@@ -72,6 +72,7 @@ client.once(Events.ClientReady, (c) => {
                     .catch((error) => {
                         console.error("Failed to send archive:", error);
                     });
+                channel
                     .send({
                         files: [{ attachment: jsonFile, name: "userCountOverTime.json" }],
                     })
