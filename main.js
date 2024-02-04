@@ -218,9 +218,15 @@ const canvas = new Canvas().initialize({
 
 const canvasFolderPath = "/canvas";
 if (fs.existsSync(canvasFolderPath)) {
-    const source = "/canvas";
-    const dest = "./canvas";
-    fs.copyFileSync(source, dest);
+    const source1 = "/canvas/sessions";
+    const dest1 = "./canvas/sessions";
+    fs.copyFileSync(source1, dest1);
+    const source2 = "/canvas/current.hst";
+    const dest2 = "./canvas/current.hst";
+    fs.copyFileSync(source2, dest2);
+    const source3 = "/canvas/userCountOverTime.json";
+    const dest3 = "./canvas/userCountOverTime.json";
+    fs.copyFileSync(source3, dest3);
     console.log("Canvas folder copied successfully");
 }
 const io = new Canvas.IO(canvas, "./canvas/current.hst");
@@ -231,9 +237,15 @@ stats.startRecording(
     24 * 60 * 60 * 1000 /* 24 hrs */
 );
 setInterval(() => {
-    const source = "./canvas";
-    const dest = "/canvas";
-    fs.copyFileSync(source, dest);
+    const source1 = "./canvas/sessions";
+    const dest1 = "/canvas/sessions";
+    fs.copyFileSync(source1, dest1);
+    const source2 = "./canvas/current.hst";
+    const dest2 = "/canvas/current.hst";
+    fs.copyFileSync(source2, dest2);
+    const source3 = "./canvas/userCountOverTime.json";
+    const dest3 = "/canvas/userCountOverTime.json";
+    fs.copyFileSync(source3, dest3);
     console.log("Canvas folder copied successfully");
 }, 60 * 1000);
 
