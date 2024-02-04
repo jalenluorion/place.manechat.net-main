@@ -321,7 +321,7 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
  * ===============================
  */
 
-const oauthRedirectUrl = "http://localhost:8080/auth/discord/redirect";
+const oauthRedirectUrl = "https://blueyplace-7jfhuhqmfa-uc.a.run.app/auth/discord/redirect";
 const oauthScope = "identify";
 
 app.get("/landing", function (req, res) {
