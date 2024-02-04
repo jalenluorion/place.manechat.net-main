@@ -273,7 +273,7 @@ setInterval(() => {
     const readSource3 = fs.readFileSync(source3, "utf8");
     const dest3 = "/canvas/userCountOverTime.json";
     fs.writeFileSync(dest3, readSource3);
-    console.log("Canvas folder copied successfully");
+    console.log("Canvas folder backed up successfully");
 }, 60 * 1000);
 
 // day 2 colors
@@ -290,7 +290,7 @@ setInterval(() => {
  */
 
 const oauthRedirectUrl =
-    "https://blueyplace-7jfhuhqmfa-uc.a.run.app/discord/redirect";
+    "https://blueyplace-7jfhuhqmfa-uc.a.run.app/auth/discord/redirect";
 const oauthScope = "identify";
 
 app.get("/landing", function (req, res) {
