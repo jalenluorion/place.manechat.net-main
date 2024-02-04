@@ -25,22 +25,6 @@ const unzipper = require("unzipper");
 
 require("dotenv").config();
 
-//
-function copyDir(src, dest) {
-    let entries = fs.readdirSync(src, { recursive: true, withFileTypes: true })
-
-    for (let entry of entries) {
-        let srcPath = Path.join(entry.path, entry.name);
-        let destPath = srcPath.replace(src, dest);
-        let destDir = Path.dirname(destPath);
-        
-        if (entry.isFile()) {
-            fs.mkdirSync(destDir, { recursive: true })
-            fs.copyFileSync(srcPath, destPath);
-        }
-    }
-}
-//
 
 /* TODO
  * - Auto update the page like vite on any changes
@@ -233,13 +217,6 @@ const canvas = new Canvas().initialize({
     ],
 });
 
-const canvasFolderPath1 = "/canvas/sessions";
-if (fs.existsSync(canvasFolderPath1)) {
-    const source1 = "/canvas/sessions";
-    const dest1 = "./canvas/sessions";
-    copyDir(source1, dest1);
-    console.log("Canvas sessions copied successfully");
-}
 const canvasFolderPath2 = "/canvas/current.hst";
 if (fs.existsSync(canvasFolderPath2)) {
     const source2 = "/canvas/current.hst";
@@ -262,9 +239,6 @@ stats.startRecording(
     24 * 60 * 60 * 1000 /* 24 hrs */
 );
 setInterval(() => {
-    const source1 = "./canvas/sessions";
-    const dest1 = "/canvas/sessions";
-    copyDir(source1, dest1);
     const source2 = "./canvas/current.hst";
     const readSource = fs.readFileSync(source2, "utf8");
     const dest2 = "/canvas/current.hst";
