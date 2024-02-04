@@ -14,7 +14,7 @@ const promisify = require("util").promisify;
 const archiver = require("archiver");
 
 // Our stuff
-const Canvas = require("/canvas");
+const Canvas = require("./canvas");
 
 // Configs
 const Config = require("./config.json");
