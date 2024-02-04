@@ -288,7 +288,7 @@ setInterval(() => {
  */
 
 const oauthRedirectUrl =
-    "http://localhost:8080/auth/discord/redirect";
+    "https://blueyplace-7jfhuhqmfa-uc.a.run.app/discord/redirect";
 const oauthScope = "identify";
 
 app.get("/landing", function (req, res) {
