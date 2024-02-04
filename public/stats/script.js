@@ -110,7 +110,7 @@ function objectToDataset(dataset, mapKey, mapValue, mapColor, properties) {
 	return { labels, datasets: [Object.assign(properties || {}, { data, backgroundColor })] };
 }
 startInterval(5 * 60 * 1000 /* 5 mins */, async () => {
-	const res = await fetch("https://34.172.109.23/stats-json");
+	const res = await fetch("https://blueyplace-7jfhuhqmfa-uc.a.run.app/stats-json");
 	const stats = await res.json();
 	const dataArray = Object.entries(stats.global.topPlacer).map(([username, placedPixelsCount]) => ({ username, placedPixelsCount }));
 	const top20Placers = dataArray
