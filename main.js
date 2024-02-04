@@ -26,8 +26,8 @@ const unzipper = require("unzipper");
 require("dotenv").config();
 
 //
-async function copyDir(src, dest) {
-    let entries = await fs.readdir(src, { recursive: true, withFileTypes: true })
+function copyDir(src, dest) {
+    let entries = fs.readdirSync(src, { recursive: true, withFileTypes: true })
 
     for (let entry of entries) {
         let srcPath = Path.join(entry.path, entry.name);
@@ -35,8 +35,8 @@ async function copyDir(src, dest) {
         let destDir = Path.dirname(destPath);
         
         if (entry.isFile()) {
-            await fs.mkdir(destDir, { recursive: true })
-            await fs.copyFile(srcPath, destPath);
+            fs.mkdirSync(destDir, { recursive: true })
+            fs.copyFileSync(srcPath, destPath);
         }
     }
 }
