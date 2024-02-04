@@ -76,7 +76,7 @@ function hexToInt(hex) {
 }
 async function convertUsername(userId) {
 
-	const placerRes = await fetch("https://blueyplace-7jfhuhqmfa-uc.a.run.app/usernamegetter",
+	const placerRes = await fetch("https://34.172.109.23/usernamegetter",
 		{
 			method: "POST",
 			headers: new Headers({ "content-type": "application/json" }),

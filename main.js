@@ -237,7 +237,7 @@ stats.startRecording(
  */
 
 const oauthRedirectUrl =
-    "https://blueyplace-7jfhuhqmfa-uc.a.run.app/auth/discord/redirect";
+    "https://34.172.109.23/auth/discord/redirect";
 const oauthScope = "identify";
 
 app.get("/landing", function (req, res) {
