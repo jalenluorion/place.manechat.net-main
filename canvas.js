@@ -141,7 +141,7 @@ let eventDate = null;
 let currentDateDay = null;
 async function generateCounters(events, topCount = 30) {
 	if (!events) {
-		events = readEventss("/canvas/current.hst")
+		events = readEventss("canvas/current.hst")
 	}
 	events.forEach((event) => {
 		const userId = event.userId;
@@ -168,7 +168,7 @@ async function generateCounters(events, topCount = 30) {
 }
 async function generateCountersForCurrentDay(events, topCount = 30) {
 	if (!events) {
-		events = readEventss("/canvas/current.hst")
+		events = readEventss("canvas/current.hst")
 	}
 	currentDateDay = new Date();
 	events = events.filter((event) => {
@@ -371,8 +371,8 @@ Canvas.Stats = class {
 		io.addListener("read", this._updateRealTime.bind(this));
 
 		// TODO: Yucky!
-		if (FileSystem.existsSync("/canvas/userCountOverTime.json")) {
-			this.global.userCountOverTime = JSON.parse(FileSystem.readFileSync("/canvas/userCountOverTime.json", { encoding: "utf-8" }));
+		if (FileSystem.existsSync("./canvas/userCountOverTime.json")) {
+			this.global.userCountOverTime = JSON.parse(FileSystem.readFileSync("./canvas/userCountOverTime.json", { encoding: "utf-8" }));
 		}
 	}
 
@@ -415,7 +415,7 @@ Canvas.Stats = class {
 		this.global.userCountOverTime[currentTimeMs] = this.getConnectedUserCount();
 
 		// TODO: Yucky!
-		FileSystem.writeFileSync("/canvas/userCountOverTime.json", JSON.stringify(this.global.userCountOverTime));
+		FileSystem.writeFileSync("./canvas/userCountOverTime.json", JSON.stringify(this.global.userCountOverTime));
 
 
 
