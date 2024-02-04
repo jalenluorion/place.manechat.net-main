@@ -25,7 +25,6 @@ const unzipper = require("unzipper");
 
 require("dotenv").config();
 
-
 /* TODO
  * - Auto update the page like vite on any changes
  * - Sync stuff like cooldown and ban
@@ -84,51 +83,6 @@ client.once(Events.ClientReady, (c) => {
     }, 15 * 60 * 1000); // 15 minutes in milliseconds
 });
 
-client.on(Events.MessageReactionAdd, async (reaction, user) => {
-    console.log("Reaction added");
-    if (reaction.message.partial) await reaction.message.fetch();
-    if (reaction.partial) await reaction.fetch();
-    if (user.bot) return;
-    if (!reaction.message.guild) return;
-    if (reaction.message.channel.id === "1185767727005188166") {
-        if (reaction.emoji.name === "👍") {
-            const attachment = reaction.message.attachments.first();
-            const mReply = await reaction.message.reply("Loading canvas backup...");
-            if (attachment) {
-                const filePath = Path.join(__dirname, attachment.name);
-                const writer = fs.createWriteStream(filePath);
-                const response = await axios({
-                    url: attachment.url,
-                    method: "GET",
-                    responseType: "stream",
-                });
-                response.data.pipe(writer);
-                await new Promise((resolve, reject) => {
-                    writer.on("finish", resolve);
-                    writer.on("error", reject);
-                });
-
-                console.log("File saved:", filePath);
-                // delete existing canvas folder
-                const canvasFolderPath = Path.join(__dirname, "canvas");
-                fs.rmdirSync(canvasFolderPath, { recursive: true });
-                
-                const unzipPath = Path.join(__dirname, "canvas");
-                fs.createReadStream(filePath)
-                    .pipe(unzipper.Extract({ path: unzipPath }))
-                    .on("close", () => {
-                        console.log("File unzipped successfully");
-                    })
-                    .on("error", (error) => {
-                        console.error("Failed to unzip the file:", error);
-                    });
-
-                await mReply.edit("Canvas backup loaded successfully!");
-            }
-        }
-    }
-});
-
 /*
  * ===============================
  */
@@ -176,9 +130,9 @@ async function userInfo(req, res, next) {
  * ===============================
  */
 
-const clients = new Map();
+var clients = new Map();
 
-const canvas = new Canvas().initialize({
+var canvas = new Canvas().initialize({
     sizeX: 500,
     sizeY: 500,
     colors: [
@@ -231,8 +185,8 @@ if (fs.existsSync(canvasFolderPath3)) {
     fs.copyFileSync(source3, dest3);
     console.log("Canvas count copied successfully");
 }
-const io = new Canvas.IO(canvas, "./canvas/current.hst");
-const stats = new Canvas.Stats(canvas, io, () => clients.size);
+var io = new Canvas.IO(canvas, "./canvas/current.hst");
+var stats = new Canvas.Stats(canvas, io, () => clients.size);
 io.read();
 stats.startRecording(
     10 * 60 * 1000 /* 10 min */,
@@ -252,8 +206,118 @@ stats.startRecording(
  * ===============================
  */
 
-const oauthRedirectUrl =
-    "https://blueyplace-7jfhuhqmfa-uc.a.run.app/auth/discord/redirect";
+client.on(Events.MessageReactionAdd, async (reaction, user) => {
+    console.log("Reaction added");
+    if (reaction.message.partial) await reaction.message.fetch();
+    if (reaction.partial) await reaction.fetch();
+    if (user.bot) return;
+    if (!reaction.message.guild) return;
+    if (reaction.message.channel.id === "1185767727005188166") {
+        if (reaction.emoji.name === "👍") {
+            const attachment = reaction.message.attachments.first();
+            const mReply = await reaction.message.reply(
+                "Loading canvas backup..."
+            );
+            if (attachment) {
+                const filePath = Path.join(__dirname, attachment.name);
+                const writer = fs.createWriteStream(filePath);
+                const response = await axios({
+                    url: attachment.url,
+                    method: "GET",
+                    responseType: "stream",
+                });
+                response.data.pipe(writer);
+                await new Promise((resolve, reject) => {
+                    writer.on("finish", resolve);
+                    writer.on("error", reject);
+                });
+
+                console.log("File saved:", filePath);
+                // delete existing canvas folder
+                const canvasFolderPath = Path.join(
+                    __dirname,
+                    "canvas",
+                    attachment.name
+                );
+
+                fs.copyFileSync(filePath, canvasFolderPath);
+
+                console.log("File unzipped successfully");
+
+                clients = new Map();
+                canvas = new Canvas().initialize({
+                    sizeX: 500,
+                    sizeY: 500,
+                    colors: [
+                        "#6d001a",
+                        "#be0039",
+                        "#ff4500",
+                        "#ffa800",
+                        "#ffd635",
+                        "#fff8b8",
+                        "#00a368",
+                        "#00cc78",
+                        "#7eed56",
+                        "#00756f",
+                        "#009eaa",
+                        "#00ccc0",
+                        "#2450a4",
+                        "#3690ea",
+                        "#51e9f4",
+                        "#493ac1",
+                        "#6a5cff",
+                        "#94b3ff",
+                        "#811e9f",
+                        "#b44ac0",
+                        "#e4abff",
+                        "#de107f",
+                        "#ff3881",
+                        "#ff99aa",
+                        "#6d482f",
+                        "#9c6926",
+                        "#ffb470",
+                        "#000000",
+                        "#515252",
+                        "#898d90",
+                        "#d4d7d9",
+                        "#ffffff",
+                    ],
+                });
+                io = new Canvas.IO(canvas, "./canvas/current.hst");
+                stats = new Canvas.Stats(canvas, io, () => clients.size);
+                io.read();
+                stats.startRecording(
+                    10 * 60 * 1000 /* 10 min */,
+                    24 * 60 * 60 * 1000 /* 24 hrs */
+                );
+                canvas.addListener("pixel", (x, y, color) => {
+                    console.log(
+                        "Pixel sent to " +
+                            clients.size +
+                            " - " +
+                            new Date().toString()
+                    );
+                    const buf = io.serializePixelWithoutTheOtherStuff(
+                        x,
+                        y,
+                        color
+                    );
+                    for (const socket of clients.values()) {
+                        socket.send(buf);
+                    }
+                });
+
+                await mReply.edit("Canvas backup loaded successfully!");
+            }
+        }
+    }
+});
+
+/*
+ * ===============================
+ */
+
+const oauthRedirectUrl = "http://localhost:8080/auth/discord/redirect";
 const oauthScope = "identify";
 
 app.get("/landing", function (req, res) {
@@ -751,7 +815,7 @@ app.get("/datadump", (req, res) => {
     archive.finalize();
 });
 
-app.get("/backupdump", (req, res) => { 
+app.get("/backupdump", (req, res) => {
     //return the canvas variable
     res.json(canvas);
 });
