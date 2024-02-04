@@ -25,6 +25,23 @@ const unzipper = require("unzipper");
 
 require("dotenv").config();
 
+//
+async function copyDir(src, dest) {
+    let entries = await fs.readdir(src, { recursive: true, withFileTypes: true })
+
+    for (let entry of entries) {
+        let srcPath = path.join(entry.path, entry.name);
+        let destPath = srcPath.replace(src, dest);
+        let destDir = path.dirname(destPath);
+        
+        if (entry.isFile()) {
+            await fs.mkdir(destDir, { recursive: true })
+            await fs.copyFile(srcPath, destPath);
+        }
+    }
+}
+//
+
 /* TODO
  * - Auto update the page like vite on any changes
  * - Sync stuff like cooldown and ban
@@ -220,7 +237,7 @@ const canvasFolderPath1 = "/canvas/sessions";
 if (fs.existsSync(canvasFolderPath1)) {
     const source1 = "/canvas/sessions";
     const dest1 = "./canvas/sessions";
-    fs.copyFileSync(source1, dest1);
+    copyDir(source1, dest1);
     console.log("Canvas sessions copied successfully");
 }
 const canvasFolderPath2 = "/canvas/current.hst";
@@ -247,7 +264,7 @@ stats.startRecording(
 setInterval(() => {
     const source1 = "./canvas/sessions";
     const dest1 = "/canvas/sessions";
-    fs.copyFileSync(source1, dest1);
+    copyDir(source1, dest1);
     const source2 = "./canvas/current.hst";
     const dest2 = "/canvas/current.hst";
     fs.copyFileSync(source2, dest2);
