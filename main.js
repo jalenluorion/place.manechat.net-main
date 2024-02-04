@@ -54,26 +54,29 @@ client.once(Events.ClientReady, (c) => {
         const guildId = "959534476520730724"; // Replace with your guild ID
         const channelId = "1185767727005188166"; // Replace with your channel ID
         const canvasFolderPath = Path.join(__dirname, "canvas");
-        const archive = archiver("zip", {
-            zlib: { level: 9 }, // Set compression level to maximum
-        });
 
-        // Add all files in the canvas folder to the archive
-        archive.directory(canvasFolderPath, false);
-
-        // Finalize the archive
-        archive.finalize();
-
+        const hstFile = fs.createReadStream(canvasFolderPath + "/current.hst");
+        const jsonFile = fs.createReadStream(canvasFolderPath + "/userCountOverTime.json");
+        
         const guild = client.guilds.cache.get(guildId);
         if (guild) {
             const channel = guild.channels.cache.get(channelId);
             if (channel) {
                 channel
                     .send({
-                        files: [{ attachment: archive, name: "canvas.zip" }],
+                        files: [{ attachment: hstFile, name: "current.hst" }],
                     })
                     .then(() => {
-                        console.log("Archive sent successfully");
+                        console.log("hst sent successfully");
+                    })
+                    .catch((error) => {
+                        console.error("Failed to send archive:", error);
+                    });
+                    .send({
+                        files: [{ attachment: jsonFile, name: "userCountOverTime.json" }],
+                    })
+                    .then(() => {
+                        console.log("json sent successfully");
                     })
                     .catch((error) => {
                         console.error("Failed to send archive:", error);
