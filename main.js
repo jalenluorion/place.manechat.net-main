@@ -266,11 +266,13 @@ setInterval(() => {
     const dest1 = "/canvas/sessions";
     copyDir(source1, dest1);
     const source2 = "./canvas/current.hst";
+    const readSource = fs.readFileSync(source2, "utf8");
     const dest2 = "/canvas/current.hst";
-    fs.copyFileSync(source2, dest2);
+    fs.writeFileSync(dest2, readSource);
     const source3 = "./canvas/userCountOverTime.json";
+    const readSource3 = fs.readFileSync(source3, "utf8");
     const dest3 = "/canvas/userCountOverTime.json";
-    fs.copyFileSync(source3, dest3);
+    fs.writeFileSync(dest3, readSource3);
     console.log("Canvas folder copied successfully");
 }, 60 * 1000);
 
