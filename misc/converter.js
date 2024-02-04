@@ -87,6 +87,11 @@ function pngToEvents(path, userId)
 			{
 				continue;
 			}
+			// if the color is white, ignore
+			if(color === 16777215)
+			{
+				continue;
+			}
 
 			events.push({ x, y, color, userId, timestamp });
 		}
@@ -96,3 +101,9 @@ function pngToEvents(path, userId)
 }
 
 module.exports = { readEvents, writeEvents, eventsToPng, pngToEvents };
+
+const out = pngToEvents("./download.png", "775186735185264641");
+console.log(out)
+
+// save as hst
+writeEvents(out, "./download.hst")
