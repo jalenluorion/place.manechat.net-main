@@ -14,7 +14,7 @@ const promisify = require("util").promisify;
 const archiver = require("archiver");
 
 // Our stuff
-const Canvas = require("./canvas");
+const Canvas = require("/canvas");
 
 // Configs
 const Config = require("./config.json");
@@ -53,7 +53,7 @@ client.once(Events.ClientReady, (c) => {
     setInterval(() => {
         const guildId = "959534476520730724"; // Replace with your guild ID
         const channelId = "1185767727005188166"; // Replace with your channel ID
-        const canvasFolderPath = Path.join(__dirname, "canvas");
+        const canvasFolderPath = "/canvas";
         const archive = archiver("zip", {
             zlib: { level: 9 }, // Set compression level to maximum
         });
@@ -109,10 +109,10 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
 
                 console.log("File saved:", filePath);
                 // delete existing canvas folder
-                const canvasFolderPath = Path.join(__dirname, "canvas");
+                const canvasFolderPath = "/canvas";
                 fs.rmdirSync(canvasFolderPath, { recursive: true });
                 
-                const unzipPath = Path.join(__dirname, "canvas");
+                const unzipPath = "/canvas";
                 fs.createReadStream(filePath)
                     .pipe(unzipper.Extract({ path: unzipPath }))
                     .on("close", () => {
@@ -143,7 +143,7 @@ app.use(Express.static(Path.join(__dirname, "public")));
 app.use(
     ExpressSession({
         store: new SessionFileStore({
-            path: "./canvas/sessions",
+            path: "/canvas/sessions",
             ttl: 7 * 24 * 60 * 60,
             retries: 0,
             encoder: (data) => JSON.stringify(data, null, "\t"),
@@ -215,7 +215,7 @@ const canvas = new Canvas().initialize({
         "#ffffff",
     ],
 });
-const io = new Canvas.IO(canvas, "./canvas/current.hst");
+const io = new Canvas.IO(canvas, "/canvas/current.hst");
 const stats = new Canvas.Stats(canvas, io, () => clients.size);
 io.read();
 stats.startRecording(
@@ -717,7 +717,7 @@ app.get("/stats-json", ExpressCompression(), userInfo, (req, res) => {
 });
 
 app.get("/datadump", (req, res) => {
-    const canvasFolderPath = Path.join(__dirname, "canvas");
+    const canvasFolderPath = "canvas";
     const archive = archiver("zip", {
         zlib: { level: 9 }, // Set compression level to maximum
     });
