@@ -220,15 +220,17 @@ const canvas = new Canvas().initialize({
 const canvasFolderPath2 = "/canvas/current.hst";
 if (fs.existsSync(canvasFolderPath2)) {
     const source2 = "/canvas/current.hst";
+    const source2File = fs.readFileSync(source2, "utf8");
     const dest2 = "./canvas/current.hst";
-    fs.copyFileSync(source2, dest2);
+    fs.writeFileSync(dest2, source2File)
     console.log("Canvas hst copied successfully");
 }
 const canvasFolderPath3 = "/canvas/userCountOverTime.json";
 if (fs.existsSync(canvasFolderPath3)) {
     const source3 = "/canvas/userCountOverTime.json";
+    const source3File = fs.readFileSync(source3, "utf8")
     const dest3 = "./canvas/userCountOverTime.json";
-    fs.copyFileSync(source3, dest3);
+    fs.writeFileSync(dest3, source3File)
     console.log("Canvas count copied successfully");
 }
 const io = new Canvas.IO(canvas, "./canvas/current.hst");
