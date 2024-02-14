@@ -19,9 +19,7 @@ const Canvas = require("./canvas");
 // Configs
 const Config = require("./config.json");
 const fs = require("fs");
-const { pipeline } = require("stream");
 const axios = require("axios");
-const unzipper = require("unzipper");
 
 require("dotenv").config();
 
@@ -70,7 +68,7 @@ client.once(Events.ClientReady, (c) => {
                         console.log("hst sent successfully");
                     })
                     .catch((error) => {
-                        console.error("Failed to send archive:", error);
+                        console.error("Failed to send files:", error);
                     });
                 channel
                     .send({
@@ -80,11 +78,11 @@ client.once(Events.ClientReady, (c) => {
                         console.log("json sent successfully");
                     })
                     .catch((error) => {
-                        console.error("Failed to send archive:", error);
+                        console.error("Failed to send files:", error);
                     });
             }
         }
-    }, 15 * 60 * 1000); // 15 minutes in milliseconds
+    }, 5 * 60 * 1000); // 15 minutes in milliseconds
 });
 
 /*
@@ -97,6 +95,26 @@ const app = Express();
 /*
  * ===============================
  */
+
+// Part1, defining blacklist
+var BLACKLIST =['Wget/1.21.3', 'curl/7.88.1'];
+// Part2, Geting client IP
+var getClientIp = function(req) {
+  var ipAddress = req.get('user-agent');
+if (!ipAddress) {
+    return '';
+  }
+return ipAddress;
+};
+//Part3, Blocking Client IP, if it is in the blacklist
+app.use(function(req, res, next) {
+  var ipAddress = getClientIp(req);
+  if(BLACKLIST.indexOf(ipAddress) === -1){
+    next();
+  } else {
+    res.status(403).end(`Blocked.`);
+  }
+});
 
 app.use(Express.static(Path.join(__dirname, "public")));
 app.use(
@@ -175,20 +193,6 @@ var canvas = new Canvas().initialize({
     ],
 });
 
-const canvasFolderPath2 = "./canvasbackup/current.hst";
-if (fs.existsSync(canvasFolderPath2)) {
-    const source2 = "./canvasbackup/current.hst";
-    const dest2 = "./canvas/current.hst";
-    fs.copyFileSync(source2, dest2);
-    console.log("Canvas hst copied successfully");
-}
-const canvasFolderPath3 = "./canvasbackup/userCountOverTime.json";
-if (fs.existsSync(canvasFolderPath3)) {
-    const source3 = "./canvasbackup/userCountOverTime.json";
-    const dest3 = "./canvas/userCountOverTime.json";
-    fs.copyFileSync(source3, dest3);
-    console.log("Canvas count copied successfully");
-}
 var io = new Canvas.IO(canvas, "./canvas/current.hst");
 var stats = new Canvas.Stats(canvas, io, () => clients.size);
 io.read();
@@ -211,7 +215,6 @@ stats.startRecording(
  */
 
 client.on(Events.MessageReactionAdd, async (reaction, user) => {
-    console.log("Reaction added");
     if (reaction.message.partial) await reaction.message.fetch();
     if (reaction.partial) await reaction.fetch();
     if (user.bot) return;
@@ -424,7 +427,7 @@ app.get("/landing", function (req, res) {
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/howler@2.2.3/dist/howler.min.js"></script>
     <script>
-        const targetTimestamp = 1706905860;
+        const targetTimestamp = 1707045773;
 		const clickSound = new Howl({ src: [ "./click.mp3" ], volume: 0.2 });
 		function clickA() {
 			clickSound.play();

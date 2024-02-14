@@ -75,7 +75,7 @@ function hexToInt(hex) {
 	return Number(`0x${hex}`);
 }
 async function convertUsername(userId) {
-
+try {
 	const placerRes = await fetch("https://blueyplace-7jfhuhqmfa-uc.a.run.app/usernamegetter",
 		{
 			method: "POST",
@@ -86,6 +86,9 @@ async function convertUsername(userId) {
 	const placerName = (await placerRes.json()).username;
 	console.log("Fetched username for: ", userId, ": ", placerName)
 	return placerName;
+} catch {
+	return null;
+}
 
 }
 const convertedCounters = {};
@@ -265,20 +268,7 @@ class Canvas extends EventEmitter {
 
 		return true;
 	}
-
-	// takes in a json file of pixel events and writes them to the canvas
-	preset(path) {
-		const events = JSON.parse(FileSystem.readFileSync(path, {
-			encoding: "utf-8"
-		}));
-
-		for (const event of events) {
-			this._setPixel(event.x, event.y, event.color, event.userId, event.timestamp);
-			this.emit("pixel",event.x, event.y, event.color, event.userId, event.timestamp);
-		}
-	}
-
-	}
+}
 
 
 
