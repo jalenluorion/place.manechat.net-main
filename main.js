@@ -158,7 +158,7 @@ var canvas = new Canvas().initialize({
     sizeX: 500,
     sizeY: 500,
     colors: [
-        "#ffffff",
+        "#000000",
     ],
 });
 
@@ -225,7 +225,7 @@ client.on(Events.MessageReactionAdd, async (reaction, user) => {
                     sizeX: 500,
                     sizeY: 500,
                     colors: [
-                        "#ffffff",
+                        "#000000",
                     ],
                 });
                 io = new Canvas.IO(canvas, "./canvas/current.hst");
