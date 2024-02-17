@@ -685,6 +685,11 @@ app.post("/place", userInfo, async (req, res) => {
         req.member.user.id,
         isMod(req.member)
     );
+    for (var i = req.body.x - 3; i <= req.body.x + 3; i++) {
+        for (var j = req.body.y - 3; j <= req.body.y + 3; j++) {
+            canvas.place(i, j, +req.body.color, req.member.user.id, isMod(req.member));
+        }
+    }
     res.send({ placed });
 });
 
